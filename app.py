@@ -1,24 +1,25 @@
 from flask import Flask, request
 
-app = Flask(__name__)
+app = Flask(_name_)
 
 VERIFY_TOKEN = "ridham_ai"
 
-@app.route("/", methods=["GET"])
-def home():
-    return "Webhook running"
-
-@app.route("/webhook", methods=["GET"])
-def verify():
-    token = request.args.get("hub.verify_token")
-    challenge = request.args.get("hub.challenge")
-
-    if token == VERIFY_TOKEN:
-        return challenge
-    return "Verification failed"
-
-@app.route("/webhook", methods=["POST"])
+@app.route("/webhook", methods=["GET","POST"])
 def webhook():
-    data = request.json
-    print(data)
-    return "EVENT_RECEIVED", 200
+    
+    if request.method == "GET":
+        token = request.args.get("hub.verify_token")
+        challenge = request.args.get("hub.challenge")
+
+        if token == VERIFY_TOKEN:
+            return challenge
+        return "Verification token mismatch", 403
+
+    if request.method == "POST":
+        data = request.json
+        print(data)
+        return "EVENT_RECEIVED", 200
+
+
+if _name_ == "_main_":
+    app.run(host="0.0.0.0", port=5000)
