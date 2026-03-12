@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 VERIFY_TOKEN = "ridham_ai"
 
@@ -33,5 +33,5 @@ def webhook():
 
 
 # Run server
-if _name_ == "_main_":
+if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
