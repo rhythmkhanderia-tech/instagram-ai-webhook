@@ -1,16 +1,19 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 app = Flask(_name_)
 
 VERIFY_TOKEN = "ridham_ai"
 
-@app.route("/")
+# Home route
+@app.route("/", methods=["GET"])
 def home():
-    return "Server running"
+    return "Instagram AI Webhook Running"
 
-@app.route("/webhook", methods=["GET","POST"])
+# Webhook route
+@app.route("/webhook", methods=["GET", "POST"])
 def webhook():
 
+    # Meta verification request
     if request.method == "GET":
         mode = request.args.get("hub.mode")
         token = request.args.get("hub.verify_token")
@@ -21,11 +24,14 @@ def webhook():
         else:
             return "Verification failed", 403
 
+    # Handle incoming messages
     if request.method == "POST":
-        data = request.json
-        print(data)
-        return "EVENT_RECEIVED", 200
+        data = request.get_json()
+        print("Received event:", data)
+
+        return jsonify({"status": "received"}), 200
 
 
+# Run server
 if _name_ == "_main_":
     app.run(host="0.0.0.0", port=5000)
