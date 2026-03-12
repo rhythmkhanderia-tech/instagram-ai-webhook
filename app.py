@@ -4,6 +4,10 @@ app = Flask(_name_)
 
 VERIFY_TOKEN = "ridham_ai"
 
+@app.route("/", methods=["GET"])
+def home():
+    return "Webhook running"
+
 @app.route("/webhook", methods=["GET"])
 def verify():
     token = request.args.get("hub.verify_token")
@@ -18,5 +22,3 @@ def webhook():
     data = request.json
     print(data)
     return "EVENT_RECEIVED", 200
-
-app.run(host="0.0.0.0", port=5000)
